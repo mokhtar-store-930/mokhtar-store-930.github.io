@@ -10251,7 +10251,7 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
 });</script><script>(function(){
 var SB='https://zoexikmlibhtibyngwcy.supabase.co',KEY='sb_publishable_HGKljCD25kQ69RBeL2Le4w_bbc8WqJ6';
 var R=window.__MKROOT||document,$=function(s){return R.querySelector(s)};
-var mem={};var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return mem[k]||null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}},del:function(k){try{localStorage.removeItem(k)}catch(e){delete mem[k]}}};
+var mem={};var KM={admin:{mk_rem:'mk_arem',mk_remoff:'mk_aremoff'},rep:{mk_asess:'mk_rsess',mk_aat:'mk_rat',mk_rem:'mk_rrem',mk_remoff:'mk_rremoff'}};function kk(k){var m=KM[window.__MKMODE||'admin'];return (m&&m[k])||k}var store={get:function(k){k=kk(k);try{return localStorage.getItem(k)}catch(e){return mem[k]||null}},set:function(k,v){k=kk(k);try{localStorage.setItem(k,v)}catch(e){mem[k]=v}},del:function(k){k=kk(k);try{localStorage.removeItem(k)}catch(e){delete mem[k]}}};
 var MODE=window.__MKMODE||'admin';var PERMS={orders:'الطلبات',products:'المنتجات',banners:'البنرات',customers:'حسابات العملاء',accounts:'الحسابات والتحصيل',inventory:'المشتريات والمخزون'};
 var ST={ebn:null,ecu:null,cacc:[],banners:[],tab:'home',sess:null,role:null,prof:null,adminExists:true,orders:[],prods:[],reps:[],custs:[],cacc:[],filt:(window.__MKMODE==='rep'?'assigned':'new'),err:'',msg:'',busy:false,edit:null,q:''};
 try{ST.sess=JSON.parse(store.get('mk_asess')||'null')}catch(e){}
