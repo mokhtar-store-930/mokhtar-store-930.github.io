@@ -87,7 +87,7 @@ font-family:"Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;direction:rtl;
 .fbar{position:fixed;bottom:64px;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;gap:10px;padding:10px 14px;background:linear-gradient(transparent,#faf6ea 30%);z-index:20}
 .dlv{background:#e8f4ee;color:#0b5a42;border-radius:14px;padding:10px 14px;margin:10px 14px;font-weight:700;font-size:14px;text-align:center}
 .stk{font-size:12px;font-weight:700;color:#0b5a42;text-align:center;margin:4px 0 0}.stk.out{color:#c0262d}
-</style></head><body><div class="app"></div><script>(function(){
+</style><link rel="manifest" href="manifest-customer.json"><meta name="theme-color" content="#0f6b4f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="المختار"><link rel="icon" type="image/png" sizes="192x192" href="icons/cust-192.png"><link rel="apple-touch-icon" href="icons/cust-apple-180.png"></head><body><div class="app"></div><script>(function(){
 var SB='https://zoexikmlibhtibyngwcy.supabase.co',KEY='sb_publishable_HGKljCD25kQ69RBeL2Le4w_bbc8WqJ6';
 var R=window.__MKROOT||document, $=function(s){return R.querySelector(s)};
 var mem={};var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return mem[k]||null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}},del:function(k){try{localStorage.removeItem(k)}catch(e){delete mem[k]}}};
@@ -335,4 +335,16 @@ setInterval(function(){if(ST.tab==='orders'&&ST.sess&&!document.hidden)loadOrder
 render();refresh().then(function(){return Promise.all([loadCatalog(),loadMe()])}).then(render);
 window.__MKREADY=1;
 })();
-</script></body></html>
+</script><script>(function(){var APP='customer';
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js?app='+APP,{scope:'./'}).then(function(reg){function ask(w){if(!w||!navigator.serviceWorker.controller)return;bar('فيه نسخة جديدة من التطبيق','تحديث',function(){w.postMessage('skip')})}ask(reg.waiting);reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed')ask(w)})});setInterval(function(){reg.update().catch(function(){})},3600000)}).catch(function(){});var rl=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(rl)return;rl=true;location.reload()})})}
+var dp=null,standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+var ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function css(){if(document.getElementById('pwacss'))return;var s=document.createElement('style');s.id='pwacss';s.textContent='.pwab{position:fixed;left:12px;right:12px;bottom:14px;max-width:496px;margin:0 auto;z-index:99999;background:#0b3d2e;color:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:10px;font:600 14px/1.4 "Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;direction:rtl;box-shadow:0 10px 30px rgba(0,0,0,.28)}.pwab img{width:38px;height:38px;border-radius:10px}.pwab span{flex:1}.pwab button{border:0;border-radius:12px;padding:9px 14px;font:inherit;font-weight:800;cursor:pointer;background:#f59e0b;color:#14231d}.pwab .x{background:transparent;color:#fff;padding:6px 8px;opacity:.7}.pwab small{display:block;font-weight:400;opacity:.85}';document.head.appendChild(s)}
+function bar(t,b,fn,sub,noX){css();var o=document.getElementById('pwabar');if(o)o.remove();var d=document.createElement('div');d.className='pwab';d.id='pwabar';d.innerHTML='<img src="icons/cust-192.png" alt=""><span>'+t+(sub?'<small>'+sub+'</small>':'')+'</span>'+(b?'<button type="button" class="go">'+b+'</button>':'')+(noX?'':'<button type="button" class="x" aria-label="إغلاق">✕</button>');document.body.appendChild(d);var g=d.querySelector('.go');if(g)g.onclick=function(){d.remove();fn&&fn()};var x=d.querySelector('.x');if(x)x.onclick=function(){d.remove();try{localStorage.setItem('mk_pwa_x_'+APP,String(Date.now()))}catch(e){}}}
+function dismissed(){try{var t=+localStorage.getItem('mk_pwa_x_'+APP);return t&&Date.now()-t<7*864e5}catch(e){return false}}
+window.mkInstall=function(){if(dp){dp.prompt();dp.userChoice.finally(function(){dp=null});return true}if(ios&&!standalone){iosHelp();return true}return false};
+function iosHelp(){bar('ثبّت التطبيق على الآيفون','',null,'من Safari: اضغط زر المشاركة ⬆️ ثم "إضافة إلى الشاشة الرئيسية"')}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;if(!standalone&&!dismissed())bar('ثبّت تطبيق المختار','ثبّت التطبيق',function(){window.mkInstall()},'يشتغل زي أي تطبيق وبسرعة أكبر')});
+window.addEventListener('appinstalled',function(){dp=null;var o=document.getElementById('pwabar');if(o)o.remove()});
+if(ios&&!standalone&&!dismissed()){window.addEventListener('load',function(){setTimeout(iosHelp,2500)})}
+})();</script></body></html>
