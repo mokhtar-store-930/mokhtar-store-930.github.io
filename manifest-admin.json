@@ -1,8 +1,8 @@
 {
  "id": "./admin.html",
- "name": "المختار - لوحة الإدارة",
- "short_name": "إدارة المختار",
- "description": "لوحة إدارة المختار للتجارة: طلبات، مبيعات، مخزون وتقارير",
+ "name": "النور - لوحة الإدارة",
+ "short_name": "إدارة النور",
+ "description": "لوحة إدارة شركة النور لتجارة المواد الغذائية: طلبات، مبيعات، مخزون وتقارير",
  "lang": "ar",
  "dir": "rtl",
  "start_url": "./admin.html?source=pwa",
@@ -13,7 +13,7 @@
   "minimal-ui"
  ],
  "orientation": "portrait",
- "theme_color": "#0b3d2e",
+ "theme_color": "#142f59",
  "background_color": "#faf6ee",
  "categories": [
   "business",
