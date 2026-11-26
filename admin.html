@@ -3285,6 +3285,12 @@ function zRestoreFile(f){var r=new FileReader();r.onload=function(){zAny(r.resul
 window.MZ=MZ;window.zRestore=zRestore;
 window.zAny=zAny;
 document.addEventListener('click',function(ev){var t=ev.target&&ev.target.closest&&ev.target.closest('[data-af]');if(!t)return;var k=t.getAttribute('data-af');if(k==='close')A.afclose();else if(k==='retry')A.afretry();else if(k==='run')A.afrun()});
+/* one-time cleanup of the old shared session key (mk_asess was used by both admin and rep before) */
+(function(){var lr=loadRole;
+ if(MODE==='rep'&&!ST.sess){try{var old=localStorage.getItem('mk_asess');if(old&&!localStorage.getItem('mk_rmig')){ST.sess=JSON.parse(old);ST.legacy=1}}catch(e){}}
+ loadRole=function(){return lr().then(function(){
+  if(MODE==='admin'&&ST.sess&&ST.role==='rep'){try{if(!localStorage.getItem('mk_rsess'))localStorage.setItem('mk_rsess',JSON.stringify(ST.sess))}catch(e){}saveSess(null);ST.prof=null;ST.role=null;ST.err=''}
+  else if(MODE==='rep'&&ST.legacy){ST.legacy=0;try{localStorage.setItem('mk_rmig','1')}catch(e){}if(ST.role==='rep')saveSess(ST.sess);else{ST.sess=null;ST.prof=null;ST.role=null;ST.err=''}}})}})();
 
 /* ===== ext18: invoice print with logo, customer details, debt before/after, address, disclaimer ===== */
 function pnLogo(){return '<svg viewBox="0 0 64 64" width="64" height="64"><path d="M32 3l25 14v30L32 61 7 47V17z" fill="#0b6b4a" stroke="#f5a623" stroke-width="3"/><text x="32" y="43" text-anchor="middle" font-size="30" font-weight="800" fill="#f5a623" font-family="Arial">م</text></svg>'}
