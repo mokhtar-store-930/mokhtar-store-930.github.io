@@ -1,8 +1,8 @@
 {
  "id": "./rep.html",
- "name": "المختار - المندوب",
- "short_name": "مندوب المختار",
- "description": "تطبيق مندوب المختار للتجارة: طلبات التوصيل والتسليم",
+ "name": "النور - المندوب",
+ "short_name": "مندوب النور",
+ "description": "تطبيق مندوب شركة النور لتجارة المواد الغذائية: طلبات التوصيل والتسليم",
  "lang": "ar",
  "dir": "rtl",
  "start_url": "./rep.html?source=pwa",
@@ -13,7 +13,7 @@
   "minimal-ui"
  ],
  "orientation": "portrait",
- "theme_color": "#b45309",
+ "theme_color": "#955f10",
  "background_color": "#faf6ee",
  "categories": [
   "business",
