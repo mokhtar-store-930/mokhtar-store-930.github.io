@@ -2414,7 +2414,7 @@ function api(path,o){o=o||{};var h={apikey:KEY,'Content-Type':'application/json'
 function tr(m){m=String(m||'');if(/Invalid login/i.test(m))return 'الإيميل أو كلمة السر غلط';if(/Failed to fetch|Load failed/i.test(m))return 'مفيش اتصال';if(/not allowed/i.test(m))return 'مش مسموح لك بالعملية دي';if(/stock would go negative/.test(m))return 'المخزون مش هيكفي';if(/rep_required/.test(m))return 'اختار مندوب';if(/no user with/.test(m))return 'مفيش مستخدم بالإيميل ده. أنشئه من Authentication > Users الأول';return m}
 function saveSess(s){ST.sess=s;if(s)store.set('mk_asess',JSON.stringify(s));else store.del('mk_asess')}
 function toast(t){var d=document.createElement('div');d.className='toast';d.textContent=t;$('.app').appendChild(d);setTimeout(function(){d.remove()},2200)}
-function rpc(f,b){return api('/rest/v1/rpc/'+f,{method:'POST',body:b||{}})}
+function rpc(f,b){if(/^post_(sale|return|purchase)$/.test(f))b={p:b};return api('/rest/v1/rpc/'+f,{method:'POST',body:b||{}})}
 function loadRole0(){return api('/rest/v1/profiles?select=*&id=eq.'+ST.sess.user.id).then(function(r){ST.prof=r&&r[0]||null;ST.role=ST.prof?ST.prof.role:null})}
 function loadAll(){var p=[];
  if(ST.role==='rep'||has('orders'))p.push(api('/rest/v1/orders?select=*&order=created_at.desc&limit=100').then(function(r){ST.orders=r||[]}));
