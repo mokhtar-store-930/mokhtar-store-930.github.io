@@ -1,8 +1,8 @@
 {
  "id": "./?app=customer",
- "name": "شركة النور لتجارة المواد الغذائية",
- "short_name": "النور",
- "description": "متجر شركة النور لتجارة المواد الغذائية للجملة: اطلب بالكرتونة أو القطعة وتابع طلباتك",
+ "name": "المختار للتجارة",
+ "short_name": "المختار",
+ "description": "متجر المختار للتجارة للجملة: اطلب بالكرتونة أو القطعة وتابع طلباتك",
  "lang": "ar",
  "dir": "rtl",
  "start_url": "./index.html?source=pwa",
@@ -13,7 +13,7 @@
   "minimal-ui"
  ],
  "orientation": "portrait",
- "theme_color": "#1d4f9c",
+ "theme_color": "#0f6b4f",
  "background_color": "#faf6ee",
  "categories": [
   "shopping",
