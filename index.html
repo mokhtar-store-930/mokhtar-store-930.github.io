@@ -716,7 +716,7 @@ var vOrdersP2=vOrders;vOrders=function(){var h=vOrdersP2();if(!h||!ST.orders)ret
  return h};
 window.__MKREADY=1;
 })();
-</script><script>(function(){var APP='customer';var APP_VER=15;
+</script><script>(function(){var APP='customer';var APP_VER=16;
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js?app='+APP,{scope:'./'}).then(function(reg){var force=false;function ask(w){if(!w||!navigator.serviceWorker.controller)return;if(force){w.postMessage('skip');return}bar('فيه نسخة جديدة من التطبيق','تحديث',function(){w.postMessage('skip')})}ask(reg.waiting);reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed')ask(w)})});setInterval(function(){reg.update().catch(function(){})},3600000);function vc(){fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).catch(function(){return null}).then(function(j){fetch('https://zoexikmlibhtibyngwcy.supabase.co/rest/v1/settings_public?select=allow_old',{headers:{apikey:'sb_publishable_HGKljCD25kQ69RBeL2Le4w_bbc8WqJ6'},cache:'no-store'}).then(function(r){return r.json()}).catch(function(){return null}).then(function(s){force=!!(s&&s[0]&&s[0].allow_old===false);if(j&&j.v>APP_VER){reg.update().catch(function(){});if(force&&reg.waiting)reg.waiting.postMessage('skip')}})})};vc();setInterval(vc,300000);document.addEventListener('visibilitychange',function(){if(!document.hidden)vc()})}).catch(function(){});var rl=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(rl)return;rl=true;location.reload()})})}
 })();
 </script></body></html>
