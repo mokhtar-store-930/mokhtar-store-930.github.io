@@ -1,6 +1,6 @@
 /* Al-Mokhtar PWA service worker. One file, registered once per app: sw.js?app=customer|admin|rep */
 var APP=(new URL(self.location.href).searchParams.get('app')||'customer');
-var V='v46';var CACHE='mk-'+APP+'-'+V;
+var V='v47';var CACHE='mk-'+APP+'-'+V;
 var PAGE={customer:'./index.html',admin:'./admin.html',rep:'./rep.html'}[APP]||'./index.html';
 var SHELL=[PAGE,'./manifest-'+APP+'.json','./icons/'+({customer:'cust',admin:'admin',rep:'rep'}[APP])+'-192.png'];
 self.addEventListener('install',function(e){self.skipWaiting();e.waitUntil(caches.open(CACHE).then(function(c){return Promise.all(SHELL.map(function(u){return c.add(new Request(u,{cache:'reload'})).catch(function(){})}))}))});
