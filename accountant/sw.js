@@ -1,5 +1,5 @@
 /* Role-specific registration and cache. Network first, no cross-role navigation capture. */
-const ROLE='accountant',V='v51',CACHE='mk-role-'+ROLE+'-'+V;
+const ROLE='accountant',V='v52',CACHE='mk-role-'+ROLE+'-'+V;
 const HOME=new URL('./',self.location.href).href;
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll([HOME,HOME+'manifest.json'])).catch(()=>{}))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('mk-role-'+ROLE+'-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
