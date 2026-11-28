@@ -1,0 +1,27 @@
+{
+  "id": "/admin.html?app=orderclerk",
+  "name": "المختار - مسؤول الطلبات",
+  "short_name": "مسؤول الطلبات المختار",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./admin.html?role=orderclerk&source=pwa",
+  "scope": "./admin.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#246b69",
+  "background_color": "#faf6ee",
+  "icons": [
+    {
+      "src": "icons/role-orderclerk-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/role-orderclerk-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

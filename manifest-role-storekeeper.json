@@ -1,0 +1,27 @@
+{
+  "id": "/admin.html?app=storekeeper",
+  "name": "المختار - أمين المخزن",
+  "short_name": "أمين المخزن المختار",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./admin.html?role=storekeeper&source=pwa",
+  "scope": "./admin.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#8b4530",
+  "background_color": "#faf6ee",
+  "icons": [
+    {
+      "src": "icons/role-storekeeper-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/role-storekeeper-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

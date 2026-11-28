@@ -1,0 +1,27 @@
+{
+  "id": "/admin.html?app=accountant",
+  "name": "المختار - المحاسب",
+  "short_name": "المحاسب المختار",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./admin.html?role=accountant&source=pwa",
+  "scope": "./admin.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#604488",
+  "background_color": "#faf6ee",
+  "icons": [
+    {
+      "src": "icons/role-accountant-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/role-accountant-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
