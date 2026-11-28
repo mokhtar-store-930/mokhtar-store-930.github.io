@@ -5,7 +5,7 @@ font-family:"Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;direction:rtl;
 .app input,.app select,.app textarea{font:inherit;width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);outline:none}
 .app input:focus,.app textarea:focus{border-color:var(--g3);box-shadow:0 0 0 4px rgba(31,157,115,.14)}
 .hero{background:linear-gradient(135deg,var(--g1),var(--g2) 70%,#13805f);color:#fff;padding:18px 16px 70px;border-radius:0 0 30px 30px;position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;left:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,185,56,.13)}
+.hero:after{content:"";position:absolute;left:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,185,56,.13);pointer-events:none}
 .top{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
 .logo{width:44px;height:44px;flex:none}
 .brand b{display:block;font-size:19px}.brand small{color:var(--am2);font-size:12px}
@@ -64,7 +64,7 @@ font-family:"Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif;direction:rtl;
 .empty{text-align:center;padding:40px 10px;color:var(--mut)}
 .total{font-size:22px;font-weight:800;color:var(--g1)}
 .hr{height:1px;background:var(--line);margin:12px 0}
-.opts{display:flex;gap:8px}.opts button{flex:1;padding:12px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-weight:700}.opts button.on{border-color:var(--g2);background:#e7f6ef;color:var(--g1)}
+.opts{display:flex;gap:8px;flex-wrap:wrap}.opts button{flex:1 1 110px;min-width:0;padding:12px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-weight:700;overflow:hidden;text-overflow:ellipsis}.opts button.on{border-color:var(--g2);background:#e7f6ef;color:var(--g1)}.paygrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.paygrid button{min-width:0;padding:12px 8px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.paygrid button.on{border-color:var(--g2);background:#e7f6ef;color:var(--g1)}
 .bn{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 14px;scrollbar-width:none}.bn::-webkit-scrollbar{display:none}.bnc{flex:none;width:86%;height:132px;border-radius:20px;scroll-snap-align:center;display:flex;align-items:flex-end;color:#fff;box-shadow:0 8px 20px rgba(11,61,46,.2);overflow:hidden}.bnt{padding:14px 16px;width:100%;background:linear-gradient(0deg,rgba(0,0,0,.45),transparent)}.bnt b{display:block;font-size:19px}.bnt span{font-size:13px;opacity:.95}.hrow{display:flex;gap:12px;overflow-x:auto;padding:6px 14px;scrollbar-width:none}.hrow::-webkit-scrollbar{display:none}.hrow .card{flex:none;width:170px}
 /* v2 */
 .card{position:relative}.heart{position:absolute;top:12px;left:12px;z-index:3;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.92);font-size:19px;color:#8a7a52;box-shadow:0 2px 8px rgba(0,0,0,.15)}.heart.on{color:#e11d48}
@@ -461,7 +461,7 @@ Object.keys(XA).forEach(function(k){A[k]=XA[k]});
 
 function loadMe(){return loadMe0().then(function(){if(ST.sess&&(!ST.prof||!ST.prof.ledger_id)&&!ST.claimTried){ST.claimTried=1;return rpc('claim_customer').then(function(ok){if(ok)return loadMe0()}).catch(function(){})}})}
 function remain(){var s=ST.stmt;var lim=Number((ST.prof&&ST.prof.credit_limit)||0);var bal=s?Number(s.balance||0):0;return lim-bal}
-function creditOk(){return !!(ST.prof&&ST.prof.credit_allowed&&Number(ST.prof.credit_limit)>0)}
+function creditOk(){return !!(ST.prof&&ST.prof.credit_allowed&&Number(ST.prof.credit_limit)>0&&(ST.set||{}).credit_enabled!==false)}
 function vSheet(){if(ST.sheet!=='co')return'';var p=ST.prof||{};var sub0=cartTotal();var cd=(ST.cp&&ST.cp.ok)?Number(ST.cp.discount||0):0;var tot=Math.max(0,sub0-cd);var RUL=ordRules();var fee=feeFor(tot);var grand=tot+fee;var below=RUL.min>0&&tot<RUL.min;var ok=creditOk();var rem=remain();var over=ok&&grand>rem;if(ST.pay==='credit'&&(!ok||over))ST.pay='cash';
  var ads=(p.addrs||[]);
  return '<div class="sheet" data-a="closesheet"><div data-stop="1"><h2 style="margin-top:0">تأكيد الطلب</h2><label class="lbl" style="margin-top:0">الاسم</label><input id="c_name" value="'+esc(p.name)+'"><label class="lbl">الموبايل</label><input id="c_phone" inputmode="tel" value="'+esc(p.phone)+'">'+
@@ -483,7 +483,7 @@ A.place=function(){var nt=val('c_note');ST.cnote=nt;var nm=val('c_name'),ph=val(
  var body={p_note:nt,p_name:nm,p_phone:ph,p_addr:ad,p_pay:ST.pay||'cash',p_items:ST.cart.map(function(c){var o={pid:c.pid,u:(c.u==='c'||String(c.u).charAt(0)==='k')?'c':'p',q:c.q};if(c.oid)o.oid=c.oid;return o})};if(ST.cp&&ST.cp.ok)body.p_coupon=ST.cp.code;
  api('/rest/v1/rpc/place_order',{method:'POST',body:body}).then(function(r){ST.cart=[];saveCart();ST.sheet=null;ST.busy=false;ST.cp=null;ST.cpmsg='';saveCp();api('/rest/v1/customer_profiles',{method:'POST',body:{id:ST.sess.user.id,name:nm,phone:ph,addr:ad},prefer:'resolution=merge-duplicates'}).catch(function(){});toast('تم إرسال الطلب '+(r&&r.id||''));go('orders')}).catch(function(x){ST.busy=false;var m=String(x.message);ST.err=/coupon|credit/.test(m)?(/coupon/.test(m)?cpErr(m):tr(m)):tr(m);render()})};
 /* ===== my orders: edit / cancel while new ===== */
-function oErr0(m){m=String(m||'');return /order_locked/.test(m)?'الطلب اتعتمد ومبقاش ينفع تعديله أو إلغاؤه':/out_of_stock/.test(m)?'صنف مش متاح بالكمية دي: '+m.split(':')[1]:/credit_not_allowed/.test(m)?'الدفع الآجل غير مفعّل لحسابك':/credit_limit/.test(m)?'الطلب أكبر من المتاح لك آجل':/not_found/.test(m)?'الطلب غير موجود':tr(m)}
+function oErr0(m){m=String(m||'');return /credit_disabled/.test(m)?'الدفع الآجل متوقف مؤقتًا من الإدارة':/order_locked/.test(m)?'الطلب اتعتمد ومبقاش ينفع تعديله أو إلغاؤه':/out_of_stock/.test(m)?'صنف مش متاح بالكمية دي: '+m.split(':')[1]:/credit_not_allowed/.test(m)?'الدفع الآجل غير مفعّل لحسابك':/credit_limit/.test(m)?'الطلب أكبر من المتاح لك آجل':/not_found/.test(m)?'الطلب غير موجود':tr(m)}
 function vOrders(){if(!ST.sess)return auth('in');
  var l=ST.orders.map(function(o){var items=(o.items||[]);var nw=o.status==='new';return '<div class="box"><div class="row"><b class="sp">طلب '+esc(o.id)+'</b><span class="st s-'+o.status+'">'+LBL[o.status]+'</span></div><div class="mut">'+new Date(o.created_at).toLocaleDateString('ar-EG',{dateStyle:'medium'})+' • '+items.length+' صنف • '+(o.pay==='credit'?'آجل':'كاش')+'</div>'+(o.delivery_slot?'<div class="dlv" style="background:#0f6b4f;color:#fff">🕒 معاد التوصيل: '+esc(o.delivery_slot)+'</div>':(o.status!=='cancelled'&&o.status!=='delivered'?'<div class="dlv">🚚 التوصيل خلال 24 ساعة</div>':''))+tl(o)+'<div class="hr"></div>'+items.map(function(i){return '<div class="row mut"><span class="sp">'+esc(i.name)+' × '+n(i.q)+' '+(i.u==='c'?'كرتونة':'قطعة')+'</span><span>'+n(i.price*i.q)+' ج</span></div>'}).join('')+(Number(o.discount)>0?'<div class="row" style="color:#0f6b4f;margin-top:6px"><span class="sp">خصم كوبون '+esc(o.coupon)+'</span><b>−'+n(o.discount)+' ج</b></div>':'') +(Number(o.delivery_fee)>0?'<div class="row mut" style="margin-top:6px"><span class="sp">🚚 رسوم توصيل</span><b>'+n(o.delivery_fee)+' ج</b></div>':'')+(o.addr?'<div class="mut" style="margin-top:6px">📍 '+esc(o.addr)+'</div>':'')+(o.note?'<div class="mut">📝 '+esc(o.note)+'</div>':'')+'<div class="row" style="margin-top:8px"><span class="sp">الإجمالي</span><b class="total" style="font-size:18px">'+n(o.total)+' ج</b></div>'+
  (nw?'<div class="mut" style="margin-top:8px">تقدر تعدّل الطلب أو تلغيه طالما لسه قيد المراجعة.</div><div class="row" style="gap:8px;margin-top:8px"><button class="btn am" style="flex:1" data-a="oedit" data-id="'+esc(o.id)+'">✏️ تعديل الطلب</button><button class="btn ghost" style="flex:1;color:#c0262d;border-color:#c0262d" data-a="ocancel" data-id="'+esc(o.id)+'">إلغاء الطلب</button></div>':o.status==='cancelled'?'<button class="btn ghost" style="margin-top:8px" data-a="odel" data-id="'+esc(o.id)+'">🗑️ حذف الطلب</button>':'<div class="mut" style="margin-top:8px">🔒 الطلب اتعتمد ومبقاش ينفع تعديله.</div>')+'</div>'}).join('');
@@ -570,7 +570,7 @@ function auth(mode){var f=ST.f,up=mode==='up';
   '<div class="fld">'+fi('job')+'<select id="a_act"><option value="">النشاط</option>'+ACTS.map(function(a){return '<option'+(a===f.act?' selected':'')+'>'+a+'</option>'}).join('')+'</select></div>'+
   '<div class="fld">'+fi('phone')+'<input id="a_phone" inputmode="tel" placeholder="رقم الهاتف" autocomplete="tel" dir="rtl" value="'+esc(f.phone||'')+'"></div>'):
   ('<div class="fld">'+fi('phone')+'<input id="a_phone" inputmode="tel" placeholder="رقم الهاتف" autocomplete="username" dir="rtl" value="'+esc(f.phone||'')+'"></div>');
- return '<div class="auth">'+head(up?'إنشاء حساب جديد':'أهلًا بعودتك')+'<div class="box" style="margin-top:-24px;position:relative">'+tabs+body+pwField().replace('autocomplete="current-password"','autocomplete="'+(up?'new-password':'current-password')+'"')+
+ return '<div class="auth">'+head(up?'إنشاء حساب جديد':'أهلًا بعودتك')+'<div style="text-align:center;margin:-8px 0 10px"><span class="lgb" style="display:inline-block;background:var(--g1);border-radius:18px;padding:8px">'+LOGO+'</span></div>'+'<div class="box" style="margin-top:0;position:relative">'+tabs+body+pwField().replace('autocomplete="current-password"','autocomplete="'+(up?'new-password':'current-password')+'"')+
  (ST.err?'<div class="err">'+esc(ST.err)+'</div>':'')+(ST.msg?'<div class="ok">'+esc(ST.msg)+'</div>':'')+
  (up?'':'<button class="lnk" data-a="forgot">نسيت كلمة المرور؟</button>')+
  '<button class="btn" style="margin-top:12px" data-a="'+(up?'signup':'login')+'" '+(ST.busy?'disabled':'')+'>'+(up?'إنشاء الحساب والمتابعة':'تسجيل الدخول')+'</button>'+
@@ -669,8 +669,8 @@ document.addEventListener('pointerleave',function(ev){if(el&&ev.target===el)swRe
 /* ===== patch29: manual payment methods in checkout ===== */
 function payOptsNow(){var s=ST.set||{},ok=creditOk();var o=[];
  if(s.pay_cash!==false)o.push({v:'cash',t:'💵 كاش عند الاستلام'});
- if(s.pay_vf&&((s.pay_vf_numbers||[]).length))o.push({v:'vf',t:'📱 فودافون كاش'});
- if(s.pay_ip&&(((s.pay_ip_accounts||[]).length+(s.pay_ip_numbers||[]).length)))o.push({v:'ip',t:'🏦 إنستاباي'});
+ if(s.pay_vf)o.push({v:'vf',t:'📱 فودافون كاش'});
+ if(s.pay_ip)o.push({v:'ip',t:'🏦 إنستاباي'});
  if(ok)o.push({v:'credit',t:'🧾 آجل'});
  if(!o.length)o.push({v:'cash',t:'💵 كاش عند الاستلام'});
  return o}
@@ -678,12 +678,16 @@ function paySec(){var s=ST.set||{},ok=creditOk(),rem=remain(),tot=cartTotal(),ov
  if(!opts.some(function(o){return o.v===ST.pay})||(ST.pay==='credit'&&over)){ST.pay=opts[0].v;ST.payto='';ST.proof=''}
  var h='<label class="lbl">طريقة الدفع</label><div class="opts">'+opts.map(function(o){return '<button data-a="pay" data-v="'+o.v+'" '+(o.v==='credit'&&over?'disabled style="opacity:.45"':'')+' class="'+(ST.pay===o.v?'on':'')+'">'+o.t+'</button>'}).join('')+'</div>';
  if(ST.pay==='vf'||ST.pay==='ip'){
-  var arr=(ST.pay==='vf'?(s.pay_vf_numbers||[]):(s.pay_ip_accounts||[]).concat(s.pay_ip_numbers||[]));
-  h+='<div class="mut" style="margin-top:8px">'+(ST.pay==='vf'?'حوّل الإجمالي على رقم فودافون كاش:':'حوّل الإجمالي على عنوان أو رقم إنستاباي:')+'</div><div class="opts" style="margin-top:4px">'+arr.map(function(x){return '<button data-a="payto" data-v="'+esc(x)+'" dir="ltr" class="'+(ST.payto===x?'on':'')+'">'+esc(x)+'</button>'}).join('')+'</div>';
-  h+='<div class="mut" style="margin-top:10px">بعد التحويل ارفع صورة إثبات التحويل (سكرين شوت):</div><label class="btn ghost" style="display:block;text-align:center;cursor:pointer;margin-top:6px">'+(ST.proof?'✓ الصورة اترفعت — اضغط لو عايز تغيّرها':'📷 اختار صورة التحويل')+'<input type="file" accept="image/*" data-proof="1" style="display:none"></label>'+(ST.uproof?'<div class="mut" style="margin-top:4px">جاري رفع الصورة…</div>':'');
+  var nums=(ST.pay==='vf'?(s.pay_vf_numbers||[]):(s.pay_ip_numbers||[])),accts=(ST.pay==='ip'?(s.pay_ip_accounts||[]):[]);
+  if(nums.length||accts.length){
+   var pbtn=function(x){return '<button data-a="payto" data-v="'+esc(x)+'" dir="ltr" class="'+(ST.payto===x?'on':'')+'">'+esc(x)+'</button>'};
+   if(nums.length)h+='<div class="mut" style="margin-top:8px">'+(ST.pay==='vf'?'حوّل الإجمالي على رقم فودافون كاش:':'حوّل الإجمالي على رقم إنستاباي:')+'</div><div class="paygrid">'+nums.map(pbtn).join('')+'</div>';
+   if(accts.length)h+='<div class="mut" style="margin-top:8px">أو على عنوان إنستاباي:</div><div class="paygrid">'+accts.map(pbtn).join('')+'</div>';
+   h+='<div class="mut" style="margin-top:10px">بعد التحويل ارفع صورة إثبات التحويل (سكرين شوت):</div><label class="btn ghost" style="display:block;text-align:center;cursor:pointer;margin-top:6px">'+(ST.proof?'✓ الصورة اترفعت — اضغط لو عايز تغيّرها':'📷 اختار صورة التحويل')+'<input type="file" accept="image/*" data-proof="1" style="display:none"></label>'+(ST.uproof?'<div class="mut" style="margin-top:4px">جاري رفع الصورة…</div>':'');
+  }
  }
  if(ok&&ST.pay==='credit')h+='<div class="mut" style="margin-top:8px">المتاح لك آجل: <b>'+money(Math.max(0,rem))+'</b> من '+money((ST.prof||{}).credit_limit)+(over?' <span style="color:#c0262d">— الطلب أكبر من المتاح، ادفع كاش أو قلل الطلب</span>':'')+'</div>';
- else if(!ok)h+='<div class="mut" style="margin-top:8px">الدفع الآجل غير مفعّل لحسابك. كلم الإدارة لتفعيله.</div>';
+ else if(!ok)h+='<div class="mut" style="margin-top:8px">'+((ST.set||{}).credit_enabled===false?'الدفع الآجل متوقف مؤقتًا من الإدارة.':'الدفع الآجل غير مفعّل لحسابك. كلم الإدارة لتفعيله.')+'</div>';
  return h}
 var vSheetP2=vSheet;vSheet=function(){var h=vSheetP2();if(!h)return h;
  var a=h.indexOf('<label class="lbl">طريقة الدفع</label>'),b=h.indexOf('<label class="lbl">كود خصم');
@@ -701,10 +705,10 @@ function upProof(f){ST.uproof=true;ST.err='';render();imgShrink(f,function(b){
   if(!r.ok){ST.err='رفع الصورة فشل، جرب تاني';return render()}
   ST.proof=SB+'/storage/v1/object/public/media/'+nm;ST.err='';render()
  }).catch(function(){ST.uproof=false;ST.err='رفع الصورة فشل، جرب تاني';render()})})}
-var oErr0P=oErr0;oErr0=function(m){m=String(m||'');return /min_order/.test(m)?'الطلب أقل من الحد الأدنى ('+String(m.split(':')[1]||'')+' ج) - زوّد سلتك':/offer_unit/.test(m)?'وحدة العرض اتغيرت، راجع السلة':/pay_method_off/.test(m)?'طريقة الدفع دي متوقفة حاليًا، اختار طريقة تانية':/bad_pay_to/.test(m)?'رقم أو عنوان التحويل مش من القائمة':/proof_required/.test(m)?'لازم ترفع صورة إثبات التحويل':oErr0P(m)};
+var oErr0P=oErr0;oErr0=function(m){m=String(m||'');return /credit_disabled/.test(m)?'الدفع الآجل متوقف مؤقتًا من الإدارة':/min_order/.test(m)?'الطلب أقل من الحد الأدنى ('+String(m.split(':')[1]||'')+' ج) - زوّد سلتك':/offer_unit/.test(m)?'وحدة العرض اتغيرت، راجع السلة':/pay_method_off/.test(m)?'طريقة الدفع دي متوقفة حاليًا، اختار طريقة تانية':/bad_pay_to/.test(m)?'رقم أو عنوان التحويل مش من القائمة':/proof_required/.test(m)?'لازم ترفع صورة إثبات التحويل':oErr0P(m)};
 A.place=function(){var nt=val('c_note');ST.cnote=nt;var nm=val('c_name'),ph=val('c_phone'),ad=val('c_addr');if(!nm||!ph||!ad){ST.err='اكتب الاسم والموبايل والعنوان';return render()}
  var pm=ST.pay||'cash';
- if(pm==='vf'||pm==='ip'){if(!ST.payto){ST.err='اختار '+(pm==='vf'?'رقم فودافون كاش':'عنوان أو رقم إنستاباي')+' اللي حوّلت عليه';return render()}if(!ST.proof){ST.err='ارفع صورة إثبات التحويل الأول';return render()}if(ST.uproof){ST.err='استنى لما الصورة تخلص رفع';return render()}}
+ if(pm==='vf'||pm==='ip'){var s0=ST.set||{},need=(pm==='vf'?(s0.pay_vf_numbers||[]).length:((s0.pay_ip_accounts||[]).length+(s0.pay_ip_numbers||[]).length));if(need){if(!ST.payto){ST.err='اختار '+(pm==='vf'?'رقم فودافون كاش':'عنوان أو رقم إنستاباي')+' اللي حوّلت عليه';return render()}if(!ST.proof){ST.err='ارفع صورة إثبات التحويل الأول';return render()}if(ST.uproof){ST.err='استنى لما الصورة تخلص رفع';return render()}}}
  ST.busy=true;ST.err='';ST.prof=Object.assign({},ST.prof,{name:nm,phone:ph,addr:ad});render();
  var body={p_note:nt,p_name:nm,p_phone:ph,p_addr:ad,p_pay:(pm==='credit'?'credit':'cash'),p_items:ST.cart.map(function(c){var o={pid:c.pid,u:(c.u==='c'||String(c.u).charAt(0)==='k')?'c':'p',q:c.q};if(c.oid)o.oid=c.oid;return o})};if(ST.cp&&ST.cp.ok)body.p_coupon=ST.cp.code;
  if(pm==='vf'||pm==='ip'){body.p_pay_method=pm;body.p_pay_to=ST.payto;body.p_pay_proof=ST.proof}
@@ -720,7 +724,7 @@ var vOrdersP2=vOrders;vOrders=function(){var h=vOrdersP2();if(!h||!ST.orders)ret
  return h};
 window.__MKREADY=1;
 })();
-</script><script>(function(){var APP='customer';var APP_VER=36;
+</script><script>(function(){var APP='customer';var APP_VER=37;
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js?app='+APP,{scope:'./'}).then(function(reg){var force=true;function ask(w){if(!w||!navigator.serviceWorker.controller)return;if(force){w.postMessage('skip');return}bar('فيه نسخة جديدة من التطبيق','تحديث',function(){w.postMessage('skip')})}ask(reg.waiting);reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed')ask(w)})});setInterval(function(){reg.update().catch(function(){})},3600000);function vc(){fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).catch(function(){return null}).then(function(j){fetch('https://zoexikmlibhtibyngwcy.supabase.co/rest/v1/settings_public?select=allow_old',{headers:{apikey:'sb_publishable_HGKljCD25kQ69RBeL2Le4w_bbc8WqJ6'},cache:'no-store'}).then(function(r){return r.json()}).catch(function(){return null}).then(function(s){force=true/*auto-update*/;if(j&&j.v>APP_VER){reg.update().catch(function(){});if(force&&reg.waiting)reg.waiting.postMessage('skip')}})})};vc();setInterval(vc,300000);document.addEventListener('visibilitychange',function(){if(!document.hidden)vc()})}).catch(function(){});var rl=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(rl)return;rl=true;location.reload()})})}
 })();
 </script></body></html>
