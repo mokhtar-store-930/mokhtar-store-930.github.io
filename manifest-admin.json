@@ -1,42 +1,27 @@
 {
- "id": "./admin.html",
- "name": "المختار - لوحة الإدارة",
- "short_name": "إدارة المختار",
- "description": "لوحة إدارة المختار للتجارة: طلبات، مبيعات، مخزون وتقارير",
- "lang": "ar",
- "dir": "rtl",
- "start_url": "./admin.html?source=pwa",
- "scope": "./admin.html",
- "display": "standalone",
- "display_override": [
-  "standalone",
-  "minimal-ui"
- ],
- "orientation": "portrait",
- "theme_color": "#0b3d2e",
- "background_color": "#faf6ee",
- "categories": [
-  "business",
-  "productivity"
- ],
- "icons": [
-  {
-   "src": "icons/admin-192.png",
-   "sizes": "192x192",
-   "type": "image/png",
-   "purpose": "any"
-  },
-  {
-   "src": "icons/admin-512.png",
-   "sizes": "512x512",
-   "type": "image/png",
-   "purpose": "any"
-  },
-  {
-   "src": "icons/admin-maskable-512.png",
-   "sizes": "512x512",
-   "type": "image/png",
-   "purpose": "maskable"
-  }
- ]
+  "id": "/admin/",
+  "name": "المختار - مدير النظام",
+  "short_name": "مدير النظام المختار",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/admin/",
+  "scope": "/admin/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0b3d2e",
+  "background_color": "#faf6ee",
+  "icons": [
+    {
+      "src": "/icons/role-admin-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/role-admin-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }

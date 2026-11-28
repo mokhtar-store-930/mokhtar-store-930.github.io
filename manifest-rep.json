@@ -1,42 +1,42 @@
 {
- "id": "./rep.html",
- "name": "المختار - المندوب",
- "short_name": "مندوب المختار",
- "description": "تطبيق مندوب المختار للتجارة: طلبات التوصيل والتسليم",
- "lang": "ar",
- "dir": "rtl",
- "start_url": "./rep.html?source=pwa",
- "scope": "./rep.html",
- "display": "standalone",
- "display_override": [
-  "standalone",
-  "minimal-ui"
- ],
- "orientation": "portrait",
- "theme_color": "#b45309",
- "background_color": "#faf6ee",
- "categories": [
-  "business",
-  "productivity"
- ],
- "icons": [
-  {
-   "src": "icons/rep-192.png",
-   "sizes": "192x192",
-   "type": "image/png",
-   "purpose": "any"
-  },
-  {
-   "src": "icons/rep-512.png",
-   "sizes": "512x512",
-   "type": "image/png",
-   "purpose": "any"
-  },
-  {
-   "src": "icons/rep-maskable-512.png",
-   "sizes": "512x512",
-   "type": "image/png",
-   "purpose": "maskable"
-  }
- ]
+  "id": "/rep.html",
+  "name": "المختار - المندوب",
+  "short_name": "مندوب المختار",
+  "description": "تطبيق مندوب المختار للتجارة: طلبات التوصيل والتسليم",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/rep.html",
+  "scope": "/rep.html",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait",
+  "theme_color": "#b45309",
+  "background_color": "#faf6ee",
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "icons/rep-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/rep-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/rep-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }

@@ -11701,9 +11701,18 @@ var invoice74=posPrintInvoice;posPrintInvoice=function(k,v){if(LOADING74||JOB74|
 
 function spinner74(on){var e=document.getElementById('printspin74');if(e)e.remove();if(!on)return;var style=document.getElementById('spinCSS74');if(!style){style=document.createElement('style');style.id='spinCSS74';style.textContent='@keyframes spin74{to{transform:rotate(360deg)}}';document.head.appendChild(style)}e=document.createElement('div');e.id='printspin74';e.setAttribute('role','status');e.setAttribute('aria-label','جاري تجهيز وإرسال نسخ الفاتورة للطباعة');e.style.cssText='position:fixed;inset:0;z-index:100010;background:#ffffff66;display:grid;place-items:center;pointer-events:auto';e.innerHTML='<div style="width:44px;height:44px;border:5px solid #d9e5dd;border-top-color:#0f6b4f;border-radius:50%;animation:spin74 .8s linear infinite"></div>';document.body.appendChild(e)}
 
+/* patch75: cashier's new-sale refresh only needs catalog and customer picker.
+ Other screens keep their full permission-aware loader. */
+var all75=loadAll;loadAll=function(){if(ST.role!=='cashier'||!can53('sales.create')||(ROUTE53&&ROUTE53!=='sales.create')||(ST.tab==='sale'&&X.sub!=='new'))return all75();return Promise.all([api('/rest/v1/products?select=*&order=cat,name').then(function(r){ST.prods=r||[]}),api('/rest/v1/customer_balances?select=*&order=name').then(function(r){ST.custs=r||[]})]).catch(function(e){ST.err=tr(e.message)})};
+/* Selecting a history/report route loads its data at that point, not at cashier login. */
+var route75=route53;route53=function(k){var ret=route75(k);if(ST.role==='cashier'&&k!=='sales.create')return all75().then(function(){render()});return ret};
+A.route53=function(d){return route53(d.key)};
+/* A role-specific staff login does not need the public first-admin-setup probe. */
+var boot75=boot;boot=function(){if(!ROLELINK||!staffRole(ROLELINK))return boot75();ST.adminExists=true;if(!ST.sess)return Promise.resolve();return loadRole().then(loadAll).catch(function(e){if(e.status===401)saveSess(null);else ST.err=tr(e.message)})};
+
 render();boot().then(function(){return lcBoot()}).then(render);window.__MKREADY=1;
 })();
-</script><script>(function(){var APP='rep';var APP_VER=55;
+</script><script>(function(){var APP='rep';var APP_VER=56;
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js?app='+APP,{scope:'./rep.html'}).then(function(reg){var force=true;function ask(w){if(!w||!navigator.serviceWorker.controller)return;if(force){w.postMessage('skip');return}bar('فيه نسخة جديدة من التطبيق','تحديث',function(){w.postMessage('skip')})}ask(reg.waiting);reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed')ask(w)})});setInterval(function(){reg.update().catch(function(){})},3600000);function vc(){fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).catch(function(){return null}).then(function(j){fetch('https://zoexikmlibhtibyngwcy.supabase.co/rest/v1/settings_public?select=allow_old',{headers:{apikey:'sb_publishable_HGKljCD25kQ69RBeL2Le4w_bbc8WqJ6'},cache:'no-store'}).then(function(r){return r.json()}).catch(function(){return null}).then(function(s){force=true/*auto-update*/;if(j&&j.v>APP_VER){reg.update().catch(function(){});if(force&&reg.waiting)reg.waiting.postMessage('skip')}})})};vc();setInterval(vc,300000);document.addEventListener('visibilitychange',function(){if(!document.hidden)vc()})}).catch(function(){});var rl=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(rl)return;rl=true;location.reload()})})}
 /* patch73: immediate role-specific install invitation. Native install needs a tap. */
 var IP73={event:null,busy:false,closed:false,installed:false};
@@ -11720,6 +11729,14 @@ function update73(){if(!document.body)return;if(hide73()){remove73();return}if(!
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();IP73.event=e;IP73.installed=false;try{localStorage.removeItem(key73)}catch(x){}update73()});
 window.addEventListener('appinstalled',function(){IP73.installed=true;IP73.event=null;try{localStorage.setItem(key73,'1')}catch(e){}remove73()});
 matchMedia('(display-mode: standalone)').addEventListener('change',update73);
-function start73(){update73();new MutationObserver(function(){update73()}).observe(document.body,{childList:true,subtree:true})}
+function start73(){update73();new MutationObserver(function(){if(start73.queued)return;start73.queued=true;requestAnimationFrame(function(){start73.queued=false;update73()})}).observe(document.body,{childList:true,subtree:true})}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start73);else start73();
+/* patch75: install UI only when native install is available. No fallback dialog. */
+function installReady75(){return !hide73()&&!!IP73.event}
+function quietInstall75(){['installbanner73','installhelp73','pwapill','pwabar'].forEach(function(id){var e=document.getElementById(id);if(e)e.remove()});document.querySelectorAll('[data-install73]').forEach(function(e){e.remove()})}
+var readyUpdate75=update73;update73=function(){if(!installReady75()){quietInstall75();return}readyUpdate75()};
+window.mkInstall=async function(){if(!installReady75()){quietInstall75();return}if(IP73.busy)return;var e=IP73.event;IP73.event=null;IP73.busy=true;quietInstall75();try{await e.prompt();await e.userChoice}catch(x){}finally{IP73.busy=false;quietInstall75()}};
+help73=function(){quietInstall75()};
+update73();
+
 })();</script></body></html>
