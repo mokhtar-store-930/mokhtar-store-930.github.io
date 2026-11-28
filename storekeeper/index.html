@@ -4176,9 +4176,18 @@ inlineWindow69=function(){var html='',closed=false;return {get closed(){return c
 var invoice71=posPrintInvoice;posPrintInvoice=function(){if(document.getElementById('printreview71')){toast('اقفل معاينة المستند أولاً قبل طباعة فاتورة');return Promise.resolve()}return invoice71.apply(this,arguments)};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('printreview71')&&!REVIEW71.printing){e.preventDefault();closeReview71()}});
 
+/* patch72: generic screen-print button must not treat one invoice as a report. */
+function invoiceView72(){if(ST.tab==='sale'&&X.sub==='view'&&X.sv)return {k:'s',doc:X.sv};if(ST.tab==='buy'&&X.bsub==='view'&&X.sv)return {k:'b',doc:X.sv};return null}
+function invoiceButtons72(h){var box=document.createElement('div');box.innerHTML=h;box.querySelectorAll('[data-a="pgprint"]').forEach(function(el){el.dataset.a='xprint';el.dataset.k=ST.tab==='buy'?'b':'s';el.removeAttribute('data-t');el.textContent='طباعة الفاتورة مباشرة'});box.querySelectorAll('[data-a="xprint"]').forEach(function(el){el.textContent='طباعة الفاتورة مباشرة'});return box.innerHTML}
+var sale72=vSale;vSale=function(){var h=sale72.apply(this,arguments);if(X.sub==='view'&&X.sv)return invoiceButtons72(h);return h};
+var buy72=vBuy;vBuy=function(){var h=buy72.apply(this,arguments);if(X.bsub==='view'&&X.sv)return invoiceButtons72(h);return h};
+var pg72=A.pgprint;A.pgprint=function(){var v=invoiceView72();if(v)return posPrintInvoice(v.k,v.doc);return pg72.apply(this,arguments)};
+/* Some older save-and-print functions call XA.xprint, not the later A override. */
+XA.xprint=function(d,doc){return posPrintInvoice(d.k,doc&&doc.items?doc:X.sv)};
+
 render();boot().then(function(){return lcBoot()}).then(render);window.__MKREADY=1;
 })();
-</script><script>(function(){var APP='admin';var PWA=window.MK_ROLE_PWA,PWAKEY=PWA?'role-'+PWA.role:APP;var APP_VER=53;
+</script><script>(function(){var APP='admin';var PWA=window.MK_ROLE_PWA,PWAKEY=PWA?'role-'+PWA.role:APP;var APP_VER=54;
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){window.addEventListener('load',function(){navigator.serviceWorker.register(PWA?PWA.sw:'sw.js?app='+APP,{scope:PWA?PWA.scope:'./admin.html'}).then(function(reg){var force=true;function ask(w){if(!w||!navigator.serviceWorker.controller)return;if(force){w.postMessage('skip');return}bar('فيه نسخة جديدة من التطبيق','تحديث',function(){w.postMessage('skip')})}ask(reg.waiting);reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed')ask(w)})});setInterval(function(){reg.update().catch(function(){})},3600000);function vc(){fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).catch(function(){return null}).then(function(j){fetch('https://zoexikmlibhtibyngwcy.supabase.co/rest/v1/settings_public?select=allow_old',{headers:{apikey:'sb_publishable_HGKljCD25kQ69RBeL2Le4w_bbc8WqJ6'},cache:'no-store'}).then(function(r){return r.json()}).catch(function(){return null}).then(function(s){force=true/*auto-update*/;if(j&&j.v>APP_VER){reg.update().catch(function(){});if(force&&reg.waiting)reg.waiting.postMessage('skip')}})})};vc();setInterval(vc,300000);document.addEventListener('visibilitychange',function(){if(!document.hidden)vc()})}).catch(function(){});var rl=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(rl)return;rl=true;location.reload()})})}
 var dp=null,standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 var ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
